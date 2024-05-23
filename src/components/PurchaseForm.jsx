@@ -13,6 +13,10 @@ const PurchaseForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    if(!purchase.cardName || !purchase.amount || isNaN(parseFloat(purchase.amount))){
+      alert('Please fill all the fields with valid data')
+      return
+    }
     dispatch({ type: 'ADD_PURCHASE', payload: purchase })
     setPurchase({ cardName: '', amount: '', note: '', date: '', status: 'planned' })
   }

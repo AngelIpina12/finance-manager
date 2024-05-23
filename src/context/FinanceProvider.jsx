@@ -11,18 +11,18 @@ const reducer = (state, action) => {
       const newPurchase = action.payload;
       const cardName = newPurchase.cardName;
       const amount = parseFloat(newPurchase.amount);
+
+      if(isNaN(amount)){return state}
+
       const updatedCards = { ...state.cards };
 
       if (!updatedCards[cardName]) {
         updatedCards[cardName] = { totalSpent: 0, remainingDebt: 0 }
       }
 
-      const currentTotalSpent = updatedCards[cardName].totalSpent;
-      const currentRemainingDebt = updatedCards[cardName].remainingDebt;
-
       if (!state.purchases.some(p => p.cardName === cardName && p.amount === newPurchase.amount && p.date === newPurchase.date && p.note === newPurchase.note)) {
-        updatedCards[cardName].totalSpent = currentTotalSpent + amount;
-        updatedCards[cardName].remainingDebt = currentRemainingDebt + amount;
+        updatedCards[cardName].totalSpent += amount;
+        updatedCards[cardName].remainingDebt += amount;
       }
 
       return {
