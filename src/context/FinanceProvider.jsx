@@ -30,7 +30,19 @@ const reducer = (state, action) => {
         purchases: [...state.purchases, newPurchase],
         cards: updatedCards
       }
-      
+    
+    case 'UPDATE_PURCHASE_DATE':
+      const { id, date } = action.payload
+      const updatedPurchases = state.purchases.map(purchase => {
+        if (purchase.id === id) {
+          return { ...purchase, date }
+        }
+        return purchase
+      })
+      return {
+        ...state,
+        purchases: updatedPurchases
+      }
     default:
       return state
   }

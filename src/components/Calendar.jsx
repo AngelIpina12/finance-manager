@@ -5,15 +5,15 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import { FinanceContext } from '../context/FinanceProvider'
-import { eventTupleToStore } from '@fullcalendar/core/internal'
 
 const Calendar = () => {
-  const { state } = useContext(FinanceContext)
+  const { state, dispatch } = useContext(FinanceContext)
   const [events, setEvents] = useState([])
   const [selectedEvent, setSelectedEvent] = useState(null)
 
   useEffect(() => {
     const purchases = state.purchases.map(purchase => ({
+      id: purchase.id,
       title: `${purchase.note} - ${purchase.amount}`,
       start: purchase.date,
       allDay: true
@@ -38,7 +38,7 @@ const Calendar = () => {
       return e
     })
     setEvents(updatedEvents)
-    dispatchEvent({type: 'UPDATE_PURCHASE_DATE', payload: { id: event.id, date: event.start }})
+    dispatch({type: 'UPDATE_PURCHASE_DATE', payload: { id: event.id, date: event.start }})
   }
 
   return (
@@ -52,6 +52,25 @@ const Calendar = () => {
         droppable={true}
         eventDrop={handleEventDrop}
       />
+      {selectedEvent && (
+        <div className="modal show" style={{ display: 'block' }}>
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Event Details</h5>
+              <button type="button" className="btn-close" onClick={() => setSelectedEvent(null)}></button>
+            </div>
+            <div className="modal-body">
+              <p>Title: {selectedEvent.title}</p>
+              <p>Start: {selectedEvent.start.toDateString()}</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={() => setSelectedEvent(null)}>Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      )}
     </div>
   )
 }
