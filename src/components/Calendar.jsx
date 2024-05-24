@@ -15,7 +15,7 @@ const Calendar = () => {
     const purchases = state.purchases.map(purchase => ({
       id: purchase.id,
       title: `${purchase.note} - ${purchase.amount}`,
-      start: purchase.date,
+      start: new Date(purchase.date),
       allDay: true
     }))
     setEvents(purchases)
@@ -62,7 +62,7 @@ const Calendar = () => {
             </div>
             <div className="modal-body">
               <p>Title: {selectedEvent.title}</p>
-              <p>Start: {selectedEvent.start.toDateString()}</p>
+              <p>Start: {new Date(selectedEvent.start).toDateString()}</p>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" onClick={() => setSelectedEvent(null)}>Close</button>

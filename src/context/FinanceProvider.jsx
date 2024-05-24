@@ -8,7 +8,11 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'ADD_PURCHASE':
-      const newPurchase = action.payload;
+      const newPurchase = {
+        ...action.payload,
+        id: state.purchases.length + 1,
+        date: new Date(action.payload.date).toISOString()
+      }
       const cardName = newPurchase.cardName;
       const amount = parseFloat(newPurchase.amount);
 
@@ -35,7 +39,7 @@ const reducer = (state, action) => {
       const { id, date } = action.payload
       const updatedPurchases = state.purchases.map(purchase => {
         if (purchase.id === id) {
-          return { ...purchase, date }
+          return { ...purchase, date: new Date(date).toISOString() }
         }
         return purchase
       })
